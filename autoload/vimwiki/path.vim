@@ -86,6 +86,10 @@ function! vimwiki#path#wikify_path(path)
     let result = substitute(result, '\\', '/', 'g')
   endif
   let result = vimwiki#path#chomp_slash(result)
+
+  " swap spaces for dashes, Github Wiki style
+  let result = substitute(result, ' ', '-', 'g')
+
   return result
 endfunction
 
