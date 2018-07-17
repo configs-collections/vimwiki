@@ -26,6 +26,8 @@ function! vimwiki#path#normalize(path)
   let path = a:path
   while 1
     let result = substitute(path, '/[^/]\+/\.\.', '', '')
+    " github wiki style
+    let result = substitute(result, ' ', '-')
     if result ==# path
       break
     endif
