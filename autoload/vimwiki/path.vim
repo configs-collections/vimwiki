@@ -26,13 +26,15 @@ function! vimwiki#path#normalize(path)
   let path = a:path
   while 1
     let result = substitute(path, '/[^/]\+/\.\.', '', '')
-    " github wiki style
-    let result = substitute(result, ' ', '-', 'g')
     if result ==# path
       break
     endif
     let path = result
   endwhile
+
+  echo path
+  let result = vimwiki#path#mangle_github_path(path)
+  echo result
   return result
 endfunction
 
@@ -59,7 +61,9 @@ endfunction
 
 
 function! vimwiki#path#abs_path_of_link(link)
-  return vimwiki#path#normalize(expand("%:p:h").'/'.a:link)
+  let result = vimwiki#path#normalize(expand("%:p:h").'/'.a:link)
+  let result = vimwiki#path#mangle_github_path(result)
+  return result
 endfunction
 
 
@@ -89,9 +93,15 @@ function! vimwiki#path#wikify_path(path)
   endif
   let result = vimwiki#path#chomp_slash(result)
 
-  " swap spaces for dashes, Github Wiki style
-  let result = substitute(result, ' ', '-', 'g')
+  let result = vimwiki#path#mangle_github_path(result)
+  return result
+endfunction
 
+
+function! vimwiki#path#mangle_github_path(path)
+  let parts = split(a:path, '/', 1)
+  let parts[-1] = substitute(parts[-1], " ", "-", "g")
+  let result = join(parts, '/')
   return result
 endfunction
 
