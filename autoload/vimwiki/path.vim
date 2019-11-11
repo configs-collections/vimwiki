@@ -32,10 +32,7 @@ function! vimwiki#path#normalize(path)
     let path = result
   endwhile
 
-  echo path
-  let result = vimwiki#path#mangle_github_path(path)
-  echo result
-  return result
+  return vimwiki#path#mangle_github_path(path)
 endfunction
 
 
